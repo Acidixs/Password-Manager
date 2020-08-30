@@ -1,7 +1,6 @@
 import random
 
 
-
 def newPassword():
     alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u",
                 "v", "w", "x", "y", "z"]
@@ -25,8 +24,12 @@ def newPassword():
     print(newPassLength[0:passlength])
 
     def save_pass_to_file():
-        with open("passwords.txt", "w") as f:
-            f.write(newPassLength)
+        f = open("passwords.txt", "w+")
+
+        f.write("\n".join(newPassLength[0:passlength]))
+        f.close()
+
+    save_pass_to_file()
 
 
 passlength = (int(input("Enter password length: ")))
