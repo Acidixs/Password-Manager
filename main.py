@@ -1,19 +1,18 @@
 import random
-
+import string
 
 
 def newPassword():
-    alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u",
-                "v", "w", "x", "y", "z"]
-    alphabetUpper = [c.upper() for c in alphabet]
-    numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
+    alphabet = list(string.ascii_lowercase)
+    alphabetUpper = list(string.ascii_uppercase)
+    numbers = list(string.digits)
     newPass = []
     defaultLength = 50
 
     while defaultLength > 0:
-        randomLetter = alphabet[random.randint(0, 25)]
-        randomNumber = numbers[random.randint(0, 9)]
-        randomUpperLetter = alphabetUpper[random.randint(0, 25)]
+        randomLetter = random.choice(alphabet)
+        randomNumber = random.choice(numbers)
+        randomUpperLetter = random.choice(alphabetUpper)
 
         newPass.append(randomLetter)
         newPass.append(randomUpperLetter)
@@ -25,8 +24,11 @@ def newPassword():
     print(newPassLength[0:passlength])
 
     def save_pass_to_file():
-        with open("passwords.txt", "w") as f:
-            f.write(newPassLength)
+       with open("passwords.txt", "a") as f:
+        f.write((newPassLength[0:passlength])+"\n")
+        f.close()
+
+    save_pass_to_file()
 
 
 passlength = (int(input("Enter password length: ")))
