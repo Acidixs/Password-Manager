@@ -9,7 +9,7 @@ def newPassword():
     numbers = list(string.digits)
     symbols = list(string.punctuation)
     newPass = []
-    defaultLength = 50
+    defaultLength = 100
 
     while defaultLength > 0:
         randomLetter = random.choice(alphabet)
@@ -34,5 +34,15 @@ def newPassword():
     save_pass_to_file()
 
 
-passlength = (int(input("Enter password length: ")))
-newPassword()
+while True:
+    try:
+        passlength = (int(input("Enter password length: ")))
+        if passlength <= 0 or passlength > 100:
+            print("You need to enter a number between 1-100")
+            continue
+
+        else:
+            newPassword()
+
+    except ValueError:
+        print("You need to enter a number between 1-100")
