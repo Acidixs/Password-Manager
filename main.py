@@ -1,35 +1,30 @@
-# Password generator by Aleksander Bø
+# Password generator by Acidix
+
 import random
 import string
 
 
 def newPassword():
-    alphabet = list(string.ascii_lowercase)
+    alphabetLower = list(string.ascii_lowercase)
     alphabetUpper = list(string.ascii_uppercase)
     numbers = list(string.digits)
     symbols = list(string.punctuation)
+
     newPass = []
-    defaultLength = 100
 
-    while defaultLength > 0:
-        randomLetter = random.choice(alphabet)
-        randomUpperLetter = random.choice(alphabetUpper)
-        randomNumber = random.choice(numbers)
-        randomSymbol = random.choice(symbols)
+    # generates random characters
+    for c in range(passlength):
+        randomChar = random.choice(alphabetLower + alphabetUpper + numbers + symbols)
 
-        randomChar = [randomLetter, randomUpperLetter, randomNumber, randomSymbol]
+        newPass.append(randomChar)
 
-        newPass.append(random.choice(randomChar))
-
-        defaultLength -= 1
-
+    # converts list to string
     newPass = ("".join([str(i) for i in newPass]))
-    print(newPass[0:passlength])
+    print(newPass)
 
     def save_pass_to_file():
         with open("passwords.txt", "a") as f:
-            f.write((newPass[0:passlength]) + "\n")
-            f.close()
+            f.write((newPass + "\n"))
 
     save_pass_to_file()
 
