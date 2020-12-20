@@ -3,41 +3,51 @@
 import random
 import string
 
-
-def newPassword():
-    alphabetLower = list(string.ascii_lowercase)
-    alphabetUpper = list(string.ascii_uppercase)
-    numbers = list(string.digits)
-    symbols = list(string.punctuation)
-
-    newPass = []
-
-    # generates random characters
-    for c in range(passlength):
-        randomChar = random.choice(alphabetLower + alphabetUpper + numbers + symbols)
-
-        newPass.append(randomChar)
-
-    # converts list to string
-    newPass = ("".join([str(i) for i in newPass]))
-    print(newPass)
-
-    def save_pass_to_file():
-        with open("passwords.txt", "a") as f:
-            f.write((newPass + "\n"))
-
-    save_pass_to_file()
+class PasswordGenerator:
+    def __init__(self):
+        self.alphabetLower = list(string.ascii_lowercase)
+        self.alphabetUpper = list(string.ascii_uppercase)
+        self.numbers = list(string.digits)
+        self.symbols = list(string.punctuation)
 
 
-while True:
-    try:
-        passlength = (int(input("Enter password length: ")))
-        if passlength <= 0 or passlength > 100:
-            print("You need to enter a number between 1-100")
-            continue
+    def newPassword(self, length):
+        newPass = []
 
-        else:
-            newPassword()
+        # generates random characters
+        for _ in range(length):
+            randomChar = random.choice(self.alphabetLower + self.alphabetUpper + self.numbers + self.symbols)
+            newPass.append(randomChar)
 
-    except ValueError:
-        print("You need to enter a number between 1-100")
+        # converts list to string
+        newPass = ("".join([str(i) for i in newPass]))
+        print(newPass)
+
+        # saves password to passwords.txt
+    def save_pass_to_file(self, paswd):
+        with open("passwords.txt", "a+") as f:
+            f.write((paswd + "\n"))
+
+
+    def valid_length(self, length):
+        return 0 < length <= 100
+
+
+    def run(self):
+        while True:
+            try:
+                paswd = (int(input("Enter password length: ")))
+                if self.valid_length(paswd):
+                    self.newPassword(paswd)
+                    self.save_pass_to_file(paswd)
+                else:
+                    print("(!) Password length must be 1-100")
+                    continue
+            except ValueError:
+                print("(!) You need to enter an int value!")
+                continue
+
+if __name__ == "__main__":
+    app = PasswordGenerator()
+    app.run()
+
