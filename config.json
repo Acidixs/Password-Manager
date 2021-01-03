@@ -1,0 +1,10 @@
+{
+    "included": [
+        {
+            "lower": false,
+            "upper": false,
+            "numbers": true,
+            "symbols": false
+        }
+    ]
+}

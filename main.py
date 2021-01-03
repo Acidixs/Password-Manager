@@ -2,6 +2,9 @@
 
 import random
 import string
+import json
+import os.path
+
 
 class PasswordGenerator:
     def __init__(self):
@@ -13,15 +16,16 @@ class PasswordGenerator:
 
     def newPassword(self, length):
         newPass = []
+        chars = self.load_config()
 
         # generates random characters
         for _ in range(length):
-            randomChar = random.choice(self.alphabetLower + self.alphabetUpper + self.numbers + self.symbols)
-            newPass.append(randomChar)
+            newPass.append(random.choice(chars))
 
         # converts list to string
         newPass = ("".join([str(i) for i in newPass]))
         print(newPass)
+        return newPass
 
         # saves password to passwords.txt
     def save_pass_to_file(self, paswd):
@@ -32,14 +36,52 @@ class PasswordGenerator:
     def valid_length(self, length):
         return 0 < length <= 100
 
+    def load_config(self):
+        included = []
+        with open("config.json", "r") as f:
+            data = json.load(f)
+        
+        if data["included"][0]["lower"]:
+            included.extend(self.alphabetLower)
+
+        if data["included"][0]["upper"]:
+            included.extend(self.alphabetUpper)
+
+        if data["included"][0]["numbers"]:
+            included.extend(self.numbers)
+
+        if data["included"][0]["symbols"]:
+            included.extend(self.symbols)
+        
+        return included
+
+        
+
+    def check_config(self):
+        if os.path.isfile("config.json"):
+            print("Config found!")
+        else:
+            included = {}
+            included["included"] = []
+            included["included"].append(
+                        {"lower": True,
+                        "upper": True,
+                        "numbers": True,
+                        "symbols": True})
+
+            print("Config missing. Creating one...")
+            with open("config.json", "w+") as f:
+                json.dump(included, f, indent=4)
+
+            print("File created.")
+
 
     def run(self):
         while True:
             try:
                 paswd = (int(input("Enter password length: ")))
                 if self.valid_length(paswd):
-                    self.newPassword(paswd)
-                    self.save_pass_to_file(paswd)
+                    self.save_pass_to_file(self.newPassword(paswd))
                 else:
                     print("(!) Password length must be 1-100")
                     continue
@@ -48,6 +90,10 @@ class PasswordGenerator:
                 continue
 
 if __name__ == "__main__":
+
+
     app = PasswordGenerator()
+    app.check_config()
+    # app.load_config()
     app.run()
 
