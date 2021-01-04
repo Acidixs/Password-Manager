@@ -1,10 +1,10 @@
 {
     "included": [
         {
-            "lower": false,
-            "upper": false,
+            "lower": true,
+            "upper": true,
             "numbers": true,
-            "symbols": false
+            "symbols": true
         }
     ]
 }
