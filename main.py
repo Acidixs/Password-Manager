@@ -4,7 +4,8 @@ import random
 import string
 import json
 import os.path
-
+import bcrypt
+from database import Database
 
 class PasswordGenerator:
     def __init__(self):
@@ -24,7 +25,6 @@ class PasswordGenerator:
 
         # converts list to string
         newPass = ("".join([str(i) for i in newPass]))
-        print(newPass)
         return newPass
 
         # saves password to passwords.txt
@@ -56,7 +56,6 @@ class PasswordGenerator:
         return included
 
         
-
     def check_config(self):
         if os.path.isfile("config.json"):
             print("Config found!")
@@ -78,10 +77,19 @@ class PasswordGenerator:
 
     def run(self):
         while True:
+            login = input("Enter master password: ")
+    
+            if Database().check_hash(login):
+                print("Logged in!")
+            else:
+                print("wrong password")
+                continue
+
             try:
-                paswd = (int(input("Enter password length: ")))
-                if self.valid_length(paswd):
-                    self.save_pass_to_file(self.newPassword(paswd))
+                length = (int(input("Enter password length: ")))
+                if self.valid_length(length):
+                    self.save_pass_to_file(self.newPassword(length))
+                    print(self.newPassword(length))
                 else:
                     print("(!) Password length must be 1-100")
                     continue
@@ -90,10 +98,6 @@ class PasswordGenerator:
                 continue
 
 if __name__ == "__main__":
-
-
     app = PasswordGenerator()
     app.check_config()
-    # app.load_config()
     app.run()
-
