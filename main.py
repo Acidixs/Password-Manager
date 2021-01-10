@@ -33,9 +33,6 @@ class PasswordGenerator:
             f.write((paswd + "\n"))
 
 
-    def valid_length(self, length):
-        return 0 < length <= 100
-
     def load_config(self):
         included = []
         with open("config.json", "r") as f:
@@ -73,31 +70,39 @@ class PasswordGenerator:
                 json.dump(included, f, indent=4)
 
             print("File created.")
+        
+    def get_length(self):
+        while True:
+            try:
+                length = int(input("Enter password length: "))
+                return length
+            except ValueError:
+                print("Please enter a number!")
+                continue
+
+
+    def login(self):
+        login = input("Enter master password: ")
+        if Database().check_hash(login):
+            print("Logged in.")
+            self.run()
+        else:
+            print("Master password incorrect!")
+            self.login()
+
 
 
     def run(self):
         while True:
-            login = input("Enter master password: ")
-    
-            if Database().check_hash(login):
-                print("Logged in!")
-            else:
-                print("wrong password")
-                continue
+            length = self.get_length()
+            pw = self.newPassword(length)
+            self.save_pass_to_file(pw)
+            print(pw)
 
-            try:
-                length = (int(input("Enter password length: ")))
-                if self.valid_length(length):
-                    self.save_pass_to_file(self.newPassword(length))
-                    print(self.newPassword(length))
-                else:
-                    print("(!) Password length must be 1-100")
-                    continue
-            except ValueError:
-                print("(!) You need to enter an int value!")
-                continue
+            
+
 
 if __name__ == "__main__":
     app = PasswordGenerator()
     app.check_config()
-    app.run()
+    app.login()
