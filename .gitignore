@@ -1,2 +1,6 @@
 .idea
 venv
+.env
+scrath.py
+__pycache__
+passwords.txt
