@@ -1,6 +1,6 @@
 .idea
 venv
 .env
-scrath.py
+scratch.py
 __pycache__
 passwords.txt
