@@ -19,7 +19,7 @@ class Database:
     def get_hash(self):
         cursor = self.mydb.cursor()
 
-        query = "SELECT user_master FROM master"
+        query = "SELECT master_password FROM user"
         cursor.execute(query)
         myHash = cursor.fetchone()[0]
         cush = "$2b$14$" + myHash
