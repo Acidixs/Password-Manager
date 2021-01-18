@@ -16,16 +16,9 @@ class PasswordGenerator:
 
 
     def newPassword(self, length):
-        newPass = []
         chars = self.load_config()
-
-        # generates random characters
-        for _ in range(length):
-            newPass.append(random.choice(chars))
-
-        # converts list to string
-        newPass = ("".join([str(i) for i in newPass]))
-        return newPass
+        password = "".join(map(str, [random.choice(chars) for _ in range(length)]))
+        return password
 
         # saves password to passwords.txt
     def save_pass_to_file(self, paswd):
