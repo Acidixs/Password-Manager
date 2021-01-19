@@ -1,4 +1,4 @@
-# Password generator by Acidix
+# Password manager by Acidix
 
 import random
 import string
@@ -7,7 +7,7 @@ import os.path
 import bcrypt
 from database import Database
 
-class PasswordGenerator:
+class PasswordManager:
     def __init__(self):
         self.alphabetLower = list(string.ascii_lowercase)
         self.alphabetUpper = list(string.ascii_uppercase)
