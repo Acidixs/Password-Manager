@@ -16,21 +16,18 @@ class Database:
         else:
             print("no connection!")
 
+    # retrieves hash from db, salt is added into hash and everything converted to binary
     def get_hash(self):
         cursor = self.mydb.cursor()
-
-        query = "SELECT master FROM user_passwords"
-        cursor.execute(query)
-        myHash = cursor.fetchall()[1][0]
-        cush = "$2b$14$" + myHash
-        bcush = str.encode(cush)
-        dcush = bcush.rstrip(b"\x00")
+        cursor.execute("SELECT master_password FROM user")
+        myHash = cursor.fetchone()[0]
+        mix = "$2b$14$" + myHash
+        encoded = str.encode(mix)
         cursor.close()
-        return dcush
+        return encoded
 
+    # converts password input to binary and compares it with hash from db
     def check_hash(self, pw):
         encoded = str.encode(pw)
-        b = encoded.rstrip(b"\x00")
         hashed = self.get_hash()
-        return bcrypt.checkpw(b, hashed)
- 
+        return bcrypt.checkpw(encoded, hashed)
