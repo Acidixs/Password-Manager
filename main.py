@@ -110,6 +110,6 @@ class PasswordManager:
 
 
 if __name__ == "__main__":
-    app = PasswordGenerator()
+    app = PasswordManager()
     app.check_config()
     app.login()
