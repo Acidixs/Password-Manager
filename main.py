@@ -20,6 +20,7 @@ class PasswordGenerator:
         password = "".join(map(str, [random.choice(chars) for _ in range(length)]))
         return password
 
+
         # saves password to passwords.txt
     def save_pass_to_file(self, paswd):
         with open("passwords.txt", "a+") as f:
@@ -64,6 +65,7 @@ class PasswordGenerator:
 
             print("File created.")
         
+
     def get_length(self):
         while True:
             try:
@@ -84,17 +86,16 @@ class PasswordGenerator:
             self.login()
 
 
-
     def run(self):
+        db = Database()
         while True:
             length = self.get_length()
             pw = self.newPassword(length)
-            self.save_pass_to_file(pw)
             print(pw)
+            self.save_pass_to_file(pw)
+            db.add_password(pw)
 
             
-
-
 if __name__ == "__main__":
     app = PasswordGenerator()
     app.check_config()

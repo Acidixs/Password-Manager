@@ -18,8 +18,8 @@ class Database:
 
     # retrieves hash from db, salt is added into hash and everything converted to binary
     def get_hash(self):
-        cursor = self.mydb.cursor()
-        cursor.execute("SELECT master_password FROM user")
+        cursor = self.mydb.cursor(buffered=True)
+        cursor.execute("SELECT master_password FROM master")
         myHash = cursor.fetchone()[0]
         mix = "$2b$14$" + myHash
         encoded = str.encode(mix)
@@ -31,3 +31,11 @@ class Database:
         encoded = str.encode(pw)
         hashed = self.get_hash()
         return bcrypt.checkpw(encoded, hashed)
+
+    def add_password(self, pw):
+        cursor = self.mydb.cursor(buffered=True)
+        conn = self.mydb
+        sql = "INSERT INTO user (passwords) VALUES (%s)"
+        cursor.execute(sql, (pw,))
+        conn.commit()
+        cursor.close()
