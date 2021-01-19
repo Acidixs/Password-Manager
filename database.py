@@ -39,3 +39,16 @@ class Database:
         cursor.execute(sql, (pw,))
         conn.commit()
         cursor.close()
+
+    def draw_passwords(self):
+        cursor = self.mydb.cursor(buffered=True, dictionary=True)
+        cursor.execute("SELECT * FROM `password-manager`.user;")
+        info = cursor.fetchall()
+        
+        for i in info:
+            for k, v in i.items():
+                print(f"{k}: {v}")
+
+
+app = Database()
+app.draw_passwords()
