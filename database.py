@@ -19,14 +19,14 @@ class Database:
     def get_hash(self):
         cursor = self.mydb.cursor()
 
-        query = "SELECT master_password FROM user"
+        query = "SELECT master FROM user_passwords"
         cursor.execute(query)
-        myHash = cursor.fetchone()[0]
+        myHash = cursor.fetchall()[1][0]
         cush = "$2b$14$" + myHash
         bcush = str.encode(cush)
         dcush = bcush.rstrip(b"\x00")
         cursor.close()
-        return(dcush)
+        return dcush
 
     def check_hash(self, pw):
         encoded = str.encode(pw)
