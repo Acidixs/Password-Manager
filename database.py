@@ -32,11 +32,11 @@ class Database:
         hashed = self.get_hash()
         return bcrypt.checkpw(encoded, hashed)
 
-    def add_password(self, pw):
+    def add_password(self, name, pw):
         cursor = self.mydb.cursor(buffered=True)
         conn = self.mydb
-        sql = "INSERT INTO user (passwords) VALUES (%s)"
-        cursor.execute(sql, (pw,))
+        sql = "INSERT INTO user (name, passwords) VALUES (%s, %s)"
+        cursor.execute(sql, (name, pw))
         conn.commit()
         cursor.close()
 
@@ -48,7 +48,4 @@ class Database:
         for i in info:
             for k, v in i.items():
                 print(f"{k}: {v}")
-
-
-app = Database()
-app.draw_passwords()
+            print("------------------------------------------------------------------------------")

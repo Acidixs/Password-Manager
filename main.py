@@ -88,16 +88,23 @@ class PasswordManager:
             self.login()
 
     def get_cmd(self):
-        cmd = input("Enter command: ") # help, new, show
+        cmd = input("Enter command: ") # help, new, show, save
+        
         if "help" in cmd:
-            print("""List of available commands: help, new, show""")
+            print("""List of available commands: help, new, show, save""")
 
         elif "new" in cmd:
-            print("Creating new password..")
+            name = input("Enter a name for the password: ")
             length = self.get_length()
             pw = self.newPassword(length)
-            self.db.add_password(pw)
+            self.db.add_password(name, pw)
             print("Your new password is: {}".format(pw))
+
+        elif "save" in cmd:
+            name = input("Enter a name for your password: ")
+            pw = input("Enter your password: ")
+            self.db.add_password(name, pw)
+            print("Password stored in db!") 
         
         elif "show" in cmd:
             print("Showing passwords...")
