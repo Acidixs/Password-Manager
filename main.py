@@ -14,6 +14,8 @@ class PasswordGenerator:
         self.numbers = list(string.digits)
         self.symbols = list(string.punctuation)
 
+        self.db = Database()
+
 
     def newPassword(self, length):
         chars = self.load_config()
@@ -85,17 +87,28 @@ class PasswordGenerator:
             print("Master password incorrect!")
             self.login()
 
+    def get_cmd(self):
+        cmd = input("Enter command: ") # help, new, show
+        if "help" in cmd:
+            print("""List of available commands: help, new, show""")
 
-    def run(self):
-        db = Database()
-        while True:
+        elif "new" in cmd:
+            print("Creating new password..")
             length = self.get_length()
             pw = self.newPassword(length)
-            print(pw)
-            self.save_pass_to_file(pw)
-            db.add_password(pw)
+            self.db.add_password(pw)
+            print("Your new password is: {}".format(pw))
+        
+        elif "show" in cmd:
+            print("Showing passwords...")
+            self.db.draw_passwords()
 
-            
+
+    def run(self):
+        while True:
+            self.get_cmd()
+
+
 if __name__ == "__main__":
     app = PasswordGenerator()
     app.check_config()
