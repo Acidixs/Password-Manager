@@ -6,15 +6,20 @@ import os
 class Database:
     def __init__(self):
         load_dotenv()
-        self.mydb = mysql.connector.connect(host=os.getenv("HOST"),
+        self.connect()
+
+
+    def connect(self):
+        try:
+            self.mydb = mysql.connector.connect(host=os.getenv("HOST"),
                                             user=os.getenv("USER"),
                                             password=os.getenv("PASSWORD"),
                                             database=os.getenv("DATABASE"))
-    def connection(self):
-        if self.mydb.is_connected():
-            print("connection established!")
-        else:
-            print("no connection!")
+            print("Connection to server was successful!")
+        except:
+            print("Connection to server was unsuccessful!")
+            restart = input("Press enter to try again: ")
+            self.connect()
 
     # retrieves hash from db, salt is added into hash and everything converted to binary
     def get_hash(self):
