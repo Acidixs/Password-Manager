@@ -42,8 +42,8 @@ class Database:
 
     def draw_passwords(self):
         cursor = self.mydb.cursor(buffered=True, dictionary=True)
-        cursor.execute("SELECT * FROM `password-manager`.user;")
-        info = cursor.fetchall()
+        cursor.execute("SELECT * FROM user")
+        info = cursor.fetchall()    
         
         for i in info:
             for k, v in i.items():
