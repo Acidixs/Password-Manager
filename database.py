@@ -6,31 +6,51 @@ import os
 class Database:
     def __init__(self):
         load_dotenv()
-        self.mydb = mysql.connector.connect(host=os.getenv("HOST"),
+        self.connect()
+
+
+    def connect(self):
+        try:
+            self.mydb = mysql.connector.connect(host=os.getenv("HOST"),
                                             user=os.getenv("USER"),
                                             password=os.getenv("PASSWORD"),
                                             database=os.getenv("DATABASE"))
-    def connection(self):
-        if self.mydb.is_connected():
-            print("connection established!")
-        else:
-            print("no connection!")
+            print("Connection to server was successful!")
+        except:
+            print("Connection to server was unsuccessful!")
+            restart = input("Press enter to try again: ")
+            self.connect()
 
+    # retrieves hash from db, salt is added into hash and everything converted to binary
     def get_hash(self):
-        cursor = self.mydb.cursor()
-
-        query = "SELECT master FROM user_passwords"
-        cursor.execute(query)
-        myHash = cursor.fetchall()[1][0]
-        cush = "$2b$14$" + myHash
-        bcush = str.encode(cush)
-        dcush = bcush.rstrip(b"\x00")
+        cursor = self.mydb.cursor(buffered=True)
+        cursor.execute("SELECT master_password FROM master")
+        myHash = cursor.fetchone()[0]
+        mix = "$2b$14$" + myHash
+        encoded = str.encode(mix)
         cursor.close()
-        return dcush
+        return encoded
 
+    # converts password input to binary and compares it with hash from db
     def check_hash(self, pw):
         encoded = str.encode(pw)
-        b = encoded.rstrip(b"\x00")
         hashed = self.get_hash()
-        return bcrypt.checkpw(b, hashed)
- 
+        return bcrypt.checkpw(encoded, hashed)
+
+    def add_password(self, name, pw):
+        cursor = self.mydb.cursor(buffered=True)
+        conn = self.mydb
+        sql = "INSERT INTO user (name, passwords) VALUES (%s, %s)"
+        cursor.execute(sql, (name, pw))
+        conn.commit()
+        cursor.close()
+
+    def draw_passwords(self):
+        cursor = self.mydb.cursor(buffered=True, dictionary=True)
+        cursor.execute("SELECT * FROM user")
+        info = cursor.fetchall()    
+        
+        for i in info:
+            for k, v in i.items():
+                print(f"{k}: {v}")
+            print("------------------------------------------------------------------------------")

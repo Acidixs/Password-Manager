@@ -1,4 +1,4 @@
-# Password generator by Acidix
+# Password manager by Acidix
 
 import random
 import string
@@ -7,18 +7,21 @@ import os.path
 import bcrypt
 from database import Database
 
-class PasswordGenerator:
+class PasswordManager:
     def __init__(self):
         self.alphabetLower = list(string.ascii_lowercase)
         self.alphabetUpper = list(string.ascii_uppercase)
         self.numbers = list(string.digits)
         self.symbols = list(string.punctuation)
 
+        self.db = Database()
+
 
     def newPassword(self, length):
         chars = self.load_config()
         password = "".join(map(str, [random.choice(chars) for _ in range(length)]))
         return password
+
 
         # saves password to passwords.txt
     def save_pass_to_file(self, paswd):
@@ -64,6 +67,7 @@ class PasswordGenerator:
 
             print("File created.")
         
+
     def get_length(self):
         while True:
             try:
@@ -83,19 +87,40 @@ class PasswordGenerator:
             print("Master password incorrect!")
             self.login()
 
+    def get_cmd(self):
+        commands = ("help, new, show, save")
+
+        cmd = input("Enter command: ")
+        if cmd not in commands:
+            print("Command not recognised. Try using the command 'help' to get the list of available commands")
+        
+        elif "help" in cmd:
+            print("""List of available commands: help, new, show, save""")
+
+        elif "new" in cmd:
+            name = input("Enter a name for the password: ")
+            length = self.get_length()
+            pw = self.newPassword(length)
+            self.db.add_password(name, pw)
+            print("Your new password is: {}".format(pw))
+
+        elif "save" in cmd:
+            name = input("Enter a name for your password: ")
+            pw = input("Enter your password: ")
+            self.db.add_password(name, pw)
+            print("Password stored in db!") 
+        
+        elif "show" in cmd:
+            print("Showing passwords...")
+            self.db.draw_passwords()
 
 
     def run(self):
         while True:
-            length = self.get_length()
-            pw = self.newPassword(length)
-            self.save_pass_to_file(pw)
-            print(pw)
-
-            
+            self.get_cmd()
 
 
 if __name__ == "__main__":
-    app = PasswordGenerator()
+    app = PasswordManager()
     app.check_config()
     app.login()
