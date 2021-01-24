@@ -5,50 +5,14 @@ import string
 import json
 import os.path
 import bcrypt
+import commands
 from database import Database
 
 class PasswordManager:
     def __init__(self):
-        self.alphabetLower = list(string.ascii_lowercase)
-        self.alphabetUpper = list(string.ascii_uppercase)
-        self.numbers = list(string.digits)
-        self.symbols = list(string.punctuation)
-
         self.db = Database()
+        self.command = commands.Commands()
 
-
-    def newPassword(self, length):
-        chars = self.load_config()
-        password = "".join(map(str, [random.choice(chars) for _ in range(length)]))
-        return password
-
-
-        # saves password to passwords.txt
-    def save_pass_to_file(self, paswd):
-        with open("passwords.txt", "a+") as f:
-            f.write((paswd + "\n"))
-
-
-    def load_config(self):
-        included = []
-        with open("config.json", "r") as f:
-            data = json.load(f)
-        
-        if data["included"][0]["lower"]:
-            included.extend(self.alphabetLower)
-
-        if data["included"][0]["upper"]:
-            included.extend(self.alphabetUpper)
-
-        if data["included"][0]["numbers"]:
-            included.extend(self.numbers)
-
-        if data["included"][0]["symbols"]:
-            included.extend(self.symbols)
-        
-        return included
-
-        
     def check_config(self):
         if os.path.isfile("config.json"):
             print("Config found!")
@@ -68,16 +32,6 @@ class PasswordManager:
             print("File created.")
         
 
-    def get_length(self):
-        while True:
-            try:
-                length = int(input("Enter password length: "))
-                return length
-            except ValueError:
-                print("Please enter a number!")
-                continue
-
-
     def login(self):
         login = input("Enter master password: ")
         if Database().check_hash(login):
@@ -93,26 +47,15 @@ class PasswordManager:
         cmd = input("Enter command: ")
         if cmd not in commands:
             print("Command not recognised. Try using the command 'help' to get the list of available commands")
-        
+
         elif "help" in cmd:
-            print("""List of available commands: help, new, show, save""")
-
+            self.command.help()
         elif "new" in cmd:
-            name = input("Enter a name for the password: ")
-            length = self.get_length()
-            pw = self.newPassword(length)
-            self.db.add_password(name, pw)
-            print("Your new password is: {}".format(pw))
-
+            self.command.new()
         elif "save" in cmd:
-            name = input("Enter a name for your password: ")
-            pw = input("Enter your password: ")
-            self.db.add_password(name, pw)
-            print("Password stored in db!") 
-        
+            self.command.save()
         elif "show" in cmd:
-            print("Showing passwords...")
-            self.db.draw_passwords()
+            self.command.show()
 
 
     def run(self):
