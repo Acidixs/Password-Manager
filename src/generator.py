@@ -28,16 +28,16 @@ class PasswordGenerator:
         with open("config.json", "r") as f:
             data = json.load(f)
 
-        if data["included"][0]["lower"]:
+        if data[0]["included"]["lower"]:
             included.extend(self.alphabetLower)
 
-        if data["included"][0]["upper"]:
+        if data[0]["included"]["upper"]:
             included.extend(self.alphabetUpper)
             
-        if data["included"][0]["numbers"]:
+        if data[0]["included"]["numbers"]:
             included.extend(self.numbers)
 
-        if data["included"][0]["symbols"]:
+        if data[0]["included"]["symbols"]:
             included.extend(self.symbols)
 
         return included

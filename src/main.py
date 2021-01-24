@@ -1,7 +1,5 @@
 # Password manager by Acidix
 
-import random
-import string
 import json
 import os.path
 import bcrypt
@@ -17,20 +15,20 @@ class PasswordManager:
         if os.path.isfile("config.json"):
             print("Config found!")
         else:
-            included = {}
-            included["included"] = []
-            included["included"].append(
-                        {"lower": True,
-                        "upper": True,
-                        "numbers": True,
-                        "symbols": True})
+            self.create_config()
 
-            print("Config missing. Creating one...")
-            with open("config.json", "w+") as f:
-                json.dump(included, f, indent=4)
 
-            print("File created.")
-        
+    def create_config(self):
+        config = [{"included": {"lower": True, "upper": True, "numbers": True, "symbols": True},
+          "export": {"file": True, "database": True}}]
+
+        print("Config missing. Creating one...")
+
+        with open("config.json", "w+") as f:
+            json.dump(config, f, indent=4)
+
+        print("Config created.")
+
 
     def login(self):
         login = input("Enter master password: ")

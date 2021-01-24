@@ -1,10 +1,14 @@
-{
-    "included": [
-        {
+[
+    {
+        "included": { 
             "lower": true,
             "upper": true,
             "numbers": true,
             "symbols": true
+        },
+        "export": {
+            "file": true,
+            "database": true
         }
-    ]
-}
+    }
+]
