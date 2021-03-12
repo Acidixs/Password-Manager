@@ -18,7 +18,7 @@ class Database:
             print("Connection to server was successful!")
         except:
             print("Connection to server was unsuccessful!")
-            restart = input("Press enter to try again: ")
+            input("Press enter to try again: ")
             self.connect()
 
     # retrieves hash from db, salt is added into hash and everything converted to binary
@@ -48,7 +48,10 @@ class Database:
     def draw_passwords(self):
         cursor = self.mydb.cursor(buffered=True, dictionary=True)
         cursor.execute("SELECT * FROM user")
-        info = cursor.fetchall()    
+        info = cursor.fetchall()
+        if not info:
+            print("No passwords found!")
+            return   
         
         for i in info:
             for k, v in i.items():
