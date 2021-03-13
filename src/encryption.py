@@ -1,4 +1,6 @@
+import cryptography
 from cryptography.fernet import Fernet
+import sys
 
 class Encrypt:
     def __init__(self):
@@ -27,9 +29,11 @@ class Decrypt(Encrypt):
     def decrypt_password(self, pw):
         token = bytes(pw, encoding="utf-8")
         key = self.load_key()
-        f = Fernet(key)
-        decrypted = f.decrypt(token)
-        return decrypted.decode("utf-8")
-
-
+        try:
+            f = Fernet(key)
+            encrypted = f.decrypt(token)
+        except:
+            print("Invalid key! Check key.txt")
+            sys.exit(1)
+        
 

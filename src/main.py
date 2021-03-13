@@ -32,11 +32,6 @@ class PasswordManager:
                 newKey = self.encrypt.new_key()
                 print("Key created and stored in key.txt")
 
-        
-
-
-
-
     def create_config(self):
         config = [{"included": {"lower": True, "upper": True, "numbers": True, "symbols": True},
           "export": {"file": True, "database": True}}]
