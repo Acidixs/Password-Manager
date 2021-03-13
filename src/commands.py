@@ -30,6 +30,10 @@ class Commands:
         self.check_export_config(name, pw)
         print("Your new password is: {}".format(pw))
 
+    def delete(self):
+        ids = input("Enter id of password: ")
+        self.db.remove_password(ids)
+
     def save(self):
         name = input("Enter a name for your password: ")
         pw = input("Enter your password: ")

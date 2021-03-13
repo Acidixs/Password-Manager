@@ -50,6 +50,15 @@ class Database:
         conn.commit()
         cursor.close()
 
+    def remove_password(self, ids):
+        cursor = self.mydb.cursor(buffered=True)
+        conn = self.mydb
+        sql = "DELETE FROM user WHERE id = %s"
+        ids = (ids,) # convert id to tuple
+        cursor.execute(sql, ids)
+        conn.commit()
+        cursor.close()
+
     def draw_passwords(self):
         cursor = self.mydb.cursor(buffered=True, dictionary=True)
         cursor.execute("SELECT * FROM user")
@@ -81,4 +90,3 @@ class Database:
                 else:
                     print("No password found! Try the command 'show', to get all your stored passwords!")
                     return
-
