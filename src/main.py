@@ -5,17 +5,36 @@ import os.path
 import bcrypt
 import commands
 from database import Database
+from encryption import Encrypt
 
 class PasswordManager:
     def __init__(self):
         self.db = Database()
         self.command = commands.Commands()
+        self.encrypt = Encrypt()
 
     def check_config(self):
         if os.path.isfile("config.json"):
             print("Config found!")
         else:
             self.create_config()
+
+    def check_key(self):
+        if os.path.isfile("key.txt"):
+            with open("key.txt", "r+") as f:
+                key = f.read()
+            if not key:
+                print("Key not found!")
+                self.encrypt.new_key()
+                print("Key created and stored in key.txt")
+        else:
+            with open("key.txt", "w+") as f:
+                newKey = self.encrypt.new_key()
+                print("Key created and stored in key.txt")
+
+        
+
+
 
 
     def create_config(self):
@@ -62,5 +81,6 @@ class PasswordManager:
 
 if __name__ == "__main__":
     app = PasswordManager()
+    app.check_key()
     app.check_config()
     app.login()
