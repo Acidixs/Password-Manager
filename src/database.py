@@ -2,11 +2,14 @@ import mysql.connector
 import bcrypt
 from dotenv import load_dotenv
 import os
+from encryption import Encrypt, Decrypt
 
 class Database:
     def __init__(self):
         load_dotenv()
         self.connect()
+        self.Encrypt = Encrypt()
+        self.Decrypt = Decrypt()
 
 
     def connect(self):
@@ -38,10 +41,12 @@ class Database:
         return bcrypt.checkpw(encoded, hashed)
 
     def add_password(self, name, pw):
+        encrypted = self.Encrypt.encrypt_password(pw=pw)
+
         cursor = self.mydb.cursor(buffered=True)
         conn = self.mydb
         sql = "INSERT INTO user (name, passwords) VALUES (%s, %s)"
-        cursor.execute(sql, (name, pw))
+        cursor.execute(sql, (name, encrypted))
         conn.commit()
         cursor.close()
 
@@ -49,15 +54,16 @@ class Database:
         cursor = self.mydb.cursor(buffered=True, dictionary=True)
         cursor.execute("SELECT * FROM user")
         info = cursor.fetchall()
-        print(info[1])
         if not info:
             print("No passwords found!")
             return   
         
         for i in info:
+            print("-"*20)
+            i["passwords"] = self.Decrypt.decrypt_password(i["passwords"])
             for k, v in i.items():
                 print(f"{k}: {v}")
-            print("------------------------------------------------------------------------------")
+
 
     def search_password(self):
         cursor = self.mydb.cursor(buffered=True, dictionary=True)
@@ -67,17 +73,12 @@ class Database:
         search = input("Enter name of saved password: ")
         for i in info:
             for k, v in i.items():
-                if i[k] == search:
-                    print(f"Password for {search} is:", i["passwords"])
+                if i["name"] == search:
+                    name = i["name"]
+                    pw = self.Decrypt.decrypt_password(i["passwords"])
+                    print(f"Password for {name} is: {pw}")
+                    return
                 else:
                     print("No password found! Try the command 'show', to get all your stored passwords!")
                     return
-
-
-
-
-            # for k in i.keys():
-            #     print(k)
-            #     if search == k.va:
-            #         print("yes")
 
