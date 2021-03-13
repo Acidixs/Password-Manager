@@ -49,3 +49,7 @@ class Commands:
     
     def search(self):
         self.db.search_password()
+
+    def update_master_password(self):
+        pw = input("Enter master password: ")
+        self.db.update_master_password(pw)

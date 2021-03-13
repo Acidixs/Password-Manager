@@ -59,7 +59,8 @@ class PasswordManager:
                     "show": self.command.show,
                     "save": self.command.save,
                     "search": self.command.search,
-                    "delete": self.command.delete}
+                    "delete": self.command.delete,
+                    "update": self.command.update_master_password}
 
         cmd = input("Enter command: ")
         if cmd not in commands.keys():

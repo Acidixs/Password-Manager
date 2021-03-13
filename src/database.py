@@ -40,6 +40,10 @@ class Database:
         hashed = self.get_hash()
         return bcrypt.checkpw(encoded, hashed)
 
+    def hash_pw(self, pw):
+        hashed = bcrypt.hashpw(bytes(pw, encoding="utf-8",), salt=bcrypt.gensalt(14))
+        return hashed[7:] # cut out salt info
+
     def add_password(self, name, pw):
         encrypted = self.Encrypt.encrypt_password(pw=pw)
 
@@ -72,6 +76,14 @@ class Database:
             i["passwords"] = self.Decrypt.decrypt_password(i["passwords"])
             for k, v in i.items():
                 print(f"{k}: {v}")
+
+    def update_master_password(self, pw):
+        cursor = self.mydb.cursor(buffered=True, dictionary=True)
+        pw = (self.hash_pw(pw), )
+        sql = "UPDATE master SET master_password = %s"
+        cursor.execute(sql, pw)
+        self.mydb.commit()
+        print("Master password updated!")
 
 
     def search_password(self):
