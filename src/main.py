@@ -40,7 +40,7 @@ class PasswordManager:
             self.login()
 
     def get_cmd(self):
-        commands = ("help, new, show, save")
+        commands = ("help, new, show, save, search")
 
         cmd = input("Enter command: ")
         if cmd not in commands:
@@ -54,6 +54,8 @@ class PasswordManager:
             self.command.save()
         elif "show" in cmd:
             self.command.show()
+        elif "search" in cmd:
+            self.command.search()
 
 
     def run(self):

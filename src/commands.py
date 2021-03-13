@@ -42,3 +42,6 @@ class Commands:
 
     def help(self):
         print("List of available commmands: 'new', 'save', 'show'")
+    
+    def search(self):
+        self.db.search_password()

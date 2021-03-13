@@ -49,6 +49,7 @@ class Database:
         cursor = self.mydb.cursor(buffered=True, dictionary=True)
         cursor.execute("SELECT * FROM user")
         info = cursor.fetchall()
+        print(info[1])
         if not info:
             print("No passwords found!")
             return   
@@ -57,3 +58,26 @@ class Database:
             for k, v in i.items():
                 print(f"{k}: {v}")
             print("------------------------------------------------------------------------------")
+
+    def search_password(self):
+        cursor = self.mydb.cursor(buffered=True, dictionary=True)
+        cursor.execute("SELECT * FROM user")
+        info = cursor.fetchall()
+        
+        search = input("Enter name of saved password: ")
+        for i in info:
+            for k, v in i.items():
+                if i[k] == search:
+                    print(f"Password for {search} is:", i["passwords"])
+                else:
+                    print("No password found! Try the command 'show', to get all your stored passwords!")
+                    return
+
+
+
+
+            # for k in i.keys():
+            #     print(k)
+            #     if search == k.va:
+            #         print("yes")
+
