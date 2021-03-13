@@ -40,22 +40,18 @@ class PasswordManager:
             self.login()
 
     def get_cmd(self):
-        commands = ("help, new, show, save, search")
+        commands = {"help": self.command.help,
+                    "new": self.command.new,
+                    "show": self.command.show,
+                    "save": self.command.save,
+                    "search": self.command.search}
 
         cmd = input("Enter command: ")
-        if cmd not in commands:
+        if cmd not in commands.keys():
             print("Command not recognised. Try using the command 'help' to get the list of available commands")
+        else:
+            commands[cmd]()
 
-        elif "help" in cmd:
-            self.command.help()
-        elif "new" in cmd:
-            self.command.new()
-        elif "save" in cmd:
-            self.command.save()
-        elif "show" in cmd:
-            self.command.show()
-        elif "search" in cmd:
-            self.command.search()
 
 
     def run(self):
