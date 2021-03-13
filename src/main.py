@@ -6,12 +6,14 @@ import bcrypt
 import commands
 from database import Database
 from encryption import Encrypt
+from authentication import Authentication
 
 class PasswordManager:
     def __init__(self):
         self.db = Database()
         self.command = commands.Commands()
         self.encrypt = Encrypt()
+        self.auth = Authentication()
 
     def check_config(self):
         if os.path.isfile("config.json"):
@@ -47,8 +49,13 @@ class PasswordManager:
     def login(self):
         login = input("Enter master password: ")
         if Database().check_hash(login):
-            print("Logged in.")
-            self.run()
+            code = str(input("Enter 2fa code: "))
+            if self.auth.verify(code):
+                print("Logged in!")
+                self.run()
+            else: 
+                print("Incorrect 2fa code")
+                self.login()
         else:
             print("Master password incorrect!")
             self.login()
