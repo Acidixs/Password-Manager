@@ -5,6 +5,7 @@ import os
 from encryption import Encrypt, Decrypt
 from datetime import datetime
 from colors import red, green, blue
+import sys
 
 os.system("color")
 
@@ -32,17 +33,23 @@ class Database:
     def get_hash(self):
         cursor = self.mydb.cursor(buffered=True)
         cursor.execute("SELECT master_password FROM master")
-        myHash = cursor.fetchone()[0]
-        mix = "$2b$14$" + myHash
-        encoded = str.encode(mix)
-        cursor.close()
-        return encoded
+        try:
+            myHash = cursor.fetchone()[0]
+            mix = "$2b$14$" + myHash
+            encoded = str.encode(mix)
+            cursor.close()
+            return encoded
+        except:
+            print(red("> Something went wrong"))
+            self.check_master_password()
+
 
     # converts password input to binary and compares it with hash from db
     def check_hash(self, pw):
         encoded = str.encode(pw)
         hashed = self.get_hash()
-        return bcrypt.checkpw(encoded, hashed)
+        result = bcrypt.checkpw(encoded, hashed)
+        return result
 
     def hash_pw(self, pw):
         hashed = bcrypt.hashpw(bytes(pw, encoding="utf-8",), salt=bcrypt.gensalt(14))
@@ -89,6 +96,24 @@ class Database:
         cursor.execute(sql, pw)
         self.mydb.commit()
         print("Master password updated!")
+
+    def check_master_password(self):
+        cursor = self.mydb.cursor(buffered=True, dictionary=True)
+        cursor.execute("SELECT master_password FROM master")
+        rowCount = cursor.rowcount
+        if rowCount == 0:
+            print(red("No master password found"))
+            pw = input("Enter your new master password: ")
+            self.set_master_password(pw)
+
+    def set_master_password(self, pw):
+        cursor = self.mydb.cursor(buffered=True, dictionary=True)
+        sql = "INSERT INTO master (master_password) VALUES (%s)"
+        cursor.execute(sql, (self.hash_pw(pw), ))
+        self.mydb.commit()
+        print("Master password set! Please restart")
+        sys.exit(1)
+
 
 
     def search_password(self):
