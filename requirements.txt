@@ -5,3 +5,4 @@ cryptography==3.4.6
 qrcode==6.1
 Pillow==8.1.2
 pyotp==2.6.0
+stdiomask==0.0.6

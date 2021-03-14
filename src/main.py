@@ -7,6 +7,7 @@ import commands
 from database import Database
 from encryption import Encrypt
 from authentication import Authentication
+import stdiomask
 
 class PasswordManager:
     def __init__(self):
@@ -47,7 +48,7 @@ class PasswordManager:
 
 
     def login(self):
-        login = input("Enter master password: ")
+        login = stdiomask.getpass("Enter password: ")
         if Database().check_hash(login):
             code = str(input("Enter 2fa code: "))
             if self.auth.verify(code):
