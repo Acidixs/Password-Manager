@@ -32,6 +32,7 @@ class Decrypt(Encrypt):
         try:
             f = Fernet(key)
             encrypted = f.decrypt(token)
+            return encrypted.decode("utf-8")
         except:
             print("Invalid key! Check key.txt")
             sys.exit(1)
