@@ -3,6 +3,7 @@ import bcrypt
 from dotenv import load_dotenv
 import os
 from encryption import Encrypt, Decrypt
+from datetime import datetime
 
 class Database:
     def __init__(self):
@@ -45,12 +46,13 @@ class Database:
         return hashed[7:] # cut out salt info
 
     def add_password(self, name, pw):
+        date = datetime.now().replace(microsecond=False)
         encrypted = self.Encrypt.encrypt_password(pw=pw)
 
         cursor = self.mydb.cursor(buffered=True)
         conn = self.mydb
-        sql = "INSERT INTO user (name, passwords) VALUES (%s, %s)"
-        cursor.execute(sql, (name, encrypted))
+        sql = "INSERT INTO user (name, passwords, date_added) VALUES (%s, %s, %s)"
+        cursor.execute(sql, (name, encrypted, date))
         conn.commit()
         cursor.close()
 
