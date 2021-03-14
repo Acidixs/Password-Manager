@@ -4,6 +4,9 @@ from dotenv import load_dotenv
 import os
 from encryption import Encrypt, Decrypt
 from datetime import datetime
+from colors import red, green, blue
+
+os.system("color")
 
 class Database:
     def __init__(self):
@@ -19,10 +22,10 @@ class Database:
                                             user=os.getenv("USER"),
                                             password=os.getenv("PASSWORD"),
                                             database=os.getenv("DATABASE"))
-            print("Connection to server was successful!")
+            print(green("> Connection to server was successful!"))
         except:
-            print("Connection to server was unsuccessful!")
-            input("Press enter to try again: ")
+            print(red("> Connection to server was unsuccessful!"))
+            input("> Press enter to try again: ")
             self.connect()
 
     # retrieves hash from db, salt is added into hash and everything converted to binary

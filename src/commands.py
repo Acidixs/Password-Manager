@@ -45,7 +45,7 @@ class Commands:
         self.db.draw_passwords()
 
     def help(self):
-        print("List of available commmands: 'new', 'save', 'show'")
+        print("List of available commmands: 'new', 'show', 'save', 'search', 'delete', 'update'")
     
     def search(self):
         self.db.search_password()
