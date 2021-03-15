@@ -88,7 +88,7 @@ class Database:
             i["passwords"] = self.Decrypt.decrypt_password(i["passwords"])
             for k, v in i.items():
                 print(f"{k}: {v}")
-                
+
     def update_master_password(self, pw):
         cursor = self.mydb.cursor(buffered=True, dictionary=True)
         pw = (self.hash_pw(pw), )
