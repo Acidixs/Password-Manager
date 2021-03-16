@@ -1,6 +1,4 @@
 import pyotp
-import qrcode
-import time
 import os
 
 

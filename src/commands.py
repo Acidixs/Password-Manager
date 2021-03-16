@@ -1,6 +1,7 @@
 from database import Database
 from generator import PasswordGenerator
 import json
+from colors import green, red
 
 class Commands:
     def __init__(self):
@@ -53,3 +54,12 @@ class Commands:
     def update_master_password(self):
         pw = input("Enter master password: ")
         self.db.update_master_password(pw)
+
+    def security(self):
+        passwords = self.db.get_passwords()
+        for p in set(passwords): # we only want to check each unique passwords
+            if passwords.count(p) >= 2:
+                print(red(f"(!) '{p}' is reused {passwords.count(p)} times "))
+
+            elif passwords.count(p) == 1:
+                print(green(f"(!) '{p}' is not reused"))

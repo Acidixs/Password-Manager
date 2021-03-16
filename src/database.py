@@ -89,6 +89,18 @@ class Database:
             for k, v in i.items():
                 print(f"{k}: {v}")
 
+    def get_passwords(self):
+        pw = []
+        cursor = self.mydb.cursor(buffered=True, dictionary=True)
+        cursor.execute("SELECT * FROM user ORDER BY date_added")
+        data = cursor.fetchall()
+        for i in data:
+            for k, v in i.items():
+                if k == "passwords":
+                   pw.append(self.Decrypt.decrypt_password(v))
+        return pw
+        
+
     def update_master_password(self, pw):
         cursor = self.mydb.cursor(buffered=True, dictionary=True)
         pw = (self.hash_pw(pw), )

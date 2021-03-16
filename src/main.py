@@ -26,7 +26,8 @@ class PasswordManager:
                     "save": self.command.save,
                     "search": self.command.search,
                     "delete": self.command.delete,
-                    "update": self.command.update_master_password}     
+                    "update": self.command.update_master_password,
+                    "security": self.command.security}     
 
     def check_config(self):
         if os.path.isfile("config.json"):
