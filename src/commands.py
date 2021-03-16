@@ -59,7 +59,7 @@ class Commands:
         passwords = self.db.get_passwords()
         for p in set(passwords): # we only want to check each unique passwords
             if passwords.count(p) >= 2:
-                print(red(f"(!) '{p}' is reused {passwords.count(p)} times "))
+                print(red(f"[✕] '{p}' is reused {passwords.count(p)} times "))
 
             elif passwords.count(p) == 1:
-                print(green(f"(!) '{p}' is not reused"))
+                print(green(f"[✓]'{p}' is not reused"))
