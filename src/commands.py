@@ -7,6 +7,7 @@ class Commands:
     def __init__(self):
         self.db = Database()
         self.pwg = PasswordGenerator()
+        
 
     def save_pass_to_file(self, name, pw):
         with open("passwords.txt", "a+") as f:
@@ -63,3 +64,9 @@ class Commands:
 
             elif passwords.count(p) == 1:
                 print(green(f"[✓]'{p}' is not reused"))
+
+        with open("common_passwords.txt", "r") as f:
+            data = f.read()
+            for p in set(passwords):
+                if p in data:
+                    print(red(p + " is a common password!"))
